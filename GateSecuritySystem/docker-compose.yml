@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: gatevise-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "9923"
+      MYSQL_DATABASE: db
+    ports:
+      - "3306:3306"
+
+  gatevise:
+    build: .
+    container_name: gatevise
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: 9923
+      DB_NAME: db
+    ports:
+      - "5000:5000"
