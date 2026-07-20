@@ -1,0 +1,51 @@
+pipeline {
+
+    agent any
+
+    environment {
+        APP = "gatevise"
+    }
+
+    stages {
+
+        stage('Clone') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t gatevise .'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                docker stop gatevise || true
+                docker rm gatevise || true
+
+                docker run -d \
+                  --name gatevise \
+                  --network gatevise-net \
+                  -e DB_HOST=gatevise-mysql \
+                  -e DB_USER=root \
+                  -e DB_PASSWORD=9923 \
+                  -e DB_NAME=db \
+                  -p 5000:5000 \
+                  gatevise
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment Successful'
+        }
+        failure {
+            echo 'Deployment Failed'
+        }
+    }
+}
