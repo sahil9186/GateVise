@@ -15,7 +15,15 @@ from flask_admin.contrib.sqla import ModelView
   
  
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:9923@localhost/db'
+
+DB_HOST = os.getenv("DB_HOST", "mysql")
+DB_USER = os.getenv("DB_USER", "root")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "9923")
+DB_NAME = os.getenv("DB_NAME", "db")
+
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+)
 
 db = SQLAlchemy(app)
 app.secret_key = 'secret_key'
