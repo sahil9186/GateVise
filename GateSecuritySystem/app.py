@@ -315,7 +315,7 @@ def insert_data(qr_data):
     password=DB_PASSWORD,
     database=DB_NAME
 )
-        )
+    
 
         cursor = mydb.cursor()
 
@@ -357,7 +357,7 @@ def insert_data_exit(qr_data):
     password=DB_PASSWORD,
     database=DB_NAME
 )
-        )
+      
 
         cursor = mydb.cursor()
 
