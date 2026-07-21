@@ -4,6 +4,7 @@ pipeline {
 
     environment {
         APP = "gatevise"
+        IMAGE = "gatevise"
     }
 
     stages {
@@ -16,25 +17,27 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t gatevise .'
+                dir('GateSecuritySystem') {
+                    sh 'docker build -t ${IMAGE} .'
+                }
             }
         }
 
         stage('Deploy') {
             steps {
                 sh '''
-                docker stop gatevise || true
-                docker rm gatevise || true
+                docker stop ${APP} || true
+                docker rm ${APP} || true
 
                 docker run -d \
-                  --name gatevise \
+                  --name ${APP} \
                   --network gatevise-net \
                   -e DB_HOST=gatevise-mysql \
                   -e DB_USER=root \
                   -e DB_PASSWORD=9923 \
                   -e DB_NAME=db \
                   -p 5000:5000 \
-                  gatevise
+                  ${IMAGE}
                 '''
             }
         }
@@ -44,6 +47,7 @@ pipeline {
         success {
             echo 'Deployment Successful'
         }
+
         failure {
             echo 'Deployment Failed'
         }
