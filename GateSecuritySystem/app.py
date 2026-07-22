@@ -309,13 +309,12 @@ import datetime
 
 def insert_data(qr_data):
     try:
-       mydb = mysql.connector.connect(
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DB_NAME
-)
-    
+        mydb = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
 
         cursor = mydb.cursor()
 
